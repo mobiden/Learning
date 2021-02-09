@@ -1,17 +1,25 @@
-koo = []
-answer = ''
-for i in range(8):
-    l = list(map(int, input().split()))
-    for s in range(i):
-        if koo[s][0] == l[0] or koo[s][1] == l[1]:
-            answer = 'YES'
-            break
-        elif abs(koo[s][0] - l[0]) == abs(koo[s][1] - l[1]):
-            answer = 'YES'
-            break
+l1 = list(map(int, input().split()))
+l2 = list(map(int, input().split()))
+
+
+def merge(l1, l2):
+    c = []
+    j = i = 0
+    while i <= len(l1) - 1:
+        if l1[i] < l2[j]:
+            c.append(l1[i])
+            i += 1
         else:
-            answer = 'NO'
-    if answer == 'YES':
-        break
-    koo.append(l)
-print(answer)
+            c.append(l2[j])
+            j += 1
+            if j > len(l2) - 1:
+                if i < len(l1):
+                    for k in range(i, len(l1)):
+                        c.append(l1[k])
+                break
+    if j < len(l2) - 1:
+        for k in range(j, len(l2)):
+            c.append((l2[k]))
+    return c
+
+print(*merge(l1, l2))
