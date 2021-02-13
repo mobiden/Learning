@@ -1,3 +1,4 @@
+# количество победителей по классам
 myfile = open('input.txt', 'r', encoding='utf-8')
 lines = myfile.readlines()
 valuepoblist = [0, 0, 0]
