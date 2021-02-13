@@ -1,3 +1,4 @@
+# сортировка победителей по списку
 n = int(input())
 uch = []
 for x in range(n):
