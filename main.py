@@ -1,24 +1,13 @@
 # генеалогическое дерево
-def addchild (parent, tempdict, theTree):
-    s = 0
-    while len(tempdict) > 0:
-        if parent == tempdict[s][0]:
-            chi = {tempdict[s][1]: {}}
-            theTree.setdefault(parent, []).append(chi)
-            tempdict.remove(tempdict[s])
-        else:
-            s += 1
-            if s == len(tempdict):
-                for x in range(len(theTree[parent])):
-                    sdt = list(theTree[parent][x].items())[0][0]
-                    print(theTree[parent].keys())
-#                    parent = theTree[parent][x]
-                    print(str(theTree[parent]))
-                    parent = theTree[parent]
-                    theTree = addchild(parent, tempdict, theTree[parent])
+def nupa(person, parent, theTree):
+    for x in theTree:
+        if x == person:
+            if theTree[x] == parent:
+                return 1
+            else:
+                return nupa(theTree[x], parent, theTree) + 1
 
 
-tempdict = []
 theTree = {}
 parents = set()
 children = set()
@@ -29,13 +18,13 @@ for i in range(n - 1):
     parent, child = x[1].strip(), x[0].strip()
     parents.add(parent)
     children.add(child)
-    tempdict.append([parent, child])
-parents -= children
-parent = parents.pop()
-theTree = addchild(parent, tempdict, theTree)
-
-print(theTree)
-
-
-
+    theTree.update({child: parent})
 myfile.close()
+parents -= children
+allpeople = parents | children
+parent = parents.pop()
+for person in sorted(allpeople):
+    if person == parent:
+        print(person, 0)
+    else:
+        print(person, nupa(person, parent, theTree))
