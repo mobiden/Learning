@@ -1,5 +1,8 @@
-from sys import stdin
-from functools import reduce
-print(*(map(lambda z: reduce(lambda x, y: (2 - int(x) - int(y)) % 2, z),
-            list(filter(lambda x: x[0] != ' ', zip(
-                *(stdin.read().strip().split('\n')[1:])))))))
+from math import sqrt
+print(*filter(
+         lambda x:
+                 (all(
+          map(lambda y: x % y != 0,
+                     range(2, round(sqrt(x)) + 1)
+                         ))),
+                list(range(2, int(input()) + 1))))
