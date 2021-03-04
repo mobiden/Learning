@@ -1,29 +1,13 @@
-from itertools import permutations
-from functools import reduce
+from itertools import combinations, permutations, repeat
+from operator import xor
 
-line = open('input.txt', 'r', encoding='utf8').read().split()
-
-stvar = list(map(lambda x: reduce(lambda a, b: str(a) + str(b), x),
-                 (permutations(range(1, int(line[0]) + 1))))) # варианты забега
-
-
-print(stvar[list(filter(lambda x: x[1],
-    list(enumerate(map(lambda x: (all(map(lambda k:
-        (x.find(line[4 + k * 4: 6 + k * 4][0]) <= x.find(line[4 + k * 4: 6 + k * 4][1])) ^
-        (x.find(line[2 + k * 4: 4 + k * 4][0]) <= x.find(line[2 + k * 4: 4 + k * 4][1])),
-                  range(int(line[1]))))),
-             stvar)))))[0][0]]
-      if list(filter(lambda x: x[1],
-    list(enumerate(map(lambda x: (all(map(lambda k:
-        (x.find(line[4 + k * 4: 6 + k * 4][0]) <= x.find(line[4 + k * 4: 6 + k * 4][1])) ^
-        (x.find(line[2 + k * 4: 4 + k * 4][0]) <= x.find(line[2 + k * 4: 4 + k * 4][1])),
-                  range(int(line[1]))))),
-             stvar))))) != [] else '0')
-"""
-myansw = list(filter(lambda x: x[1],
-    list(enumerate(map(lambda x: (all(map(lambda k:
-        (x.find(line[4 + k * 4: 6 + k * 4][0]) <= x.find(line[4 + k * 4: 6 + k * 4][1])) ^
-        (x.find(line[2 + k * 4: 4 + k * 4][0]) <= x.find(line[2 + k * 4: 4 + k * 4][1])),
-                  range(int(line[1]))))),
-             stvar)))))
-"""
+print(next(map(lambda a:
+               ' '.join(map(str, a[0])),
+               filter(lambda a: all(map(lambda b: xor(
+                   *map(lambda com: com in combinations(a[0], 2), b, )), a[1])), (
+                          lambda a, b: zip(permutations(a), repeat(b)))(
+                   *(lambda k, n: (range(1, k + 1),
+                                   tuple(map(lambda st: (st[:2], st[2:]),
+                                     map(lambda _: tuple(map(int, input().split())),
+                                                 range(n)))))
+                     )(*map(int, input().split()))))), 0))
