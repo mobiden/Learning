@@ -32,21 +32,36 @@ class Matrix:
         return Matrix(templi1)
 
     def __mul__(self, other):
-        askli = [line.copy() for line in self.li]
-        num = other
-        for z in askli:
-            for i in range(len(z)):
-                z[i] = (z[i] * num)
+
+        if isinstance(other, int) or isinstance(other, float):
+            askli = [line.copy() for line in self.li]
+            num = other
+            for z in askli:
+                for i in range(len(z)):
+                    z[i] = (z[i] * num)
+
+        elif isinstance(other, Matrix):
+            if len(self.li[0]) == len(other.li):
+                askli = []
+                for i in range(len(self.li)):
+                    askli.append([])
+                    for k in range(len(other.li[i])):
+                        for j in range(len(self.li[i])):
+                            if j == 0:
+                                askli[i].append(0)
+                            askli[i][k] += self.li[i][j] * other.li[j][k]
+            else:
+                raise MatrixError(Matrix(self.li), Matrix(other.li))
+
         return Matrix(askli)
 
     __rmul__ = __mul__
 
     def transpose(self):
         tempmat = []
-        for i in range(len(self.li[0])):
-            tempmat.append([])
 
         for i in range(len(self.li)):
+            tempmat.append([])
             for j in range(len(self.li[i])):
                 tempmat[j].append(self.li[i][j])
         self.li = tempmat
@@ -64,16 +79,4 @@ class Matrix:
 
         return Matrix(tempmat)
 
-# Task 4 check 1
-mid = Matrix([[1, 0, 0],[0, 1, 0],[0, 0, 1]])
-m1 = Matrix([[3, 2], [-10, 0], [14, 5]])
-m2 = Matrix([[5, 2, 10], [-0.5, -0.25, 18], [-22, -2.5, -0.125]])
-print(mid * m1)
-print(mid * m2)
-print(m2 * m1)
-try:
-    m = m1 * m2
-    print("WA It should be error")
-except MatrixError as e:
-    print(e.matrix1)
-    print(e.matrix2)
+exec(stdin.read())
