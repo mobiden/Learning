@@ -41,17 +41,18 @@ class Matrix:
                     z[i] = (z[i] * num)
 
         elif isinstance(other, Matrix):
-            if len(self.li[0]) == len(other.li):
+            firstli = [line.copy() for line in self.li]
+            if len(firstli[0]) == len(other.li):
                 askli = []
-                for i in range(len(self.li)):
+                for i in range(len(firstli)):
                     askli.append([])
                     for k in range(len(other.li[i])):
-                        for j in range(len(self.li[i])):
+                        for j in range(len(firstli[i])):
                             if j == 0:
                                 askli[i].append(0)
-                            askli[i][k] += self.li[i][j] * other.li[j][k]
+                            askli[i][k] += firstli[i][j] * other.li[j][k]
             else:
-                raise MatrixError(Matrix(self.li), Matrix(other.li))
+                raise MatrixError(Matrix(firstli), Matrix(other.li))
 
         return Matrix(askli)
 
@@ -59,11 +60,12 @@ class Matrix:
 
     def transpose(self):
         tempmat = []
-
-        for i in range(len(self.li)):
-            tempmat.append([])
-            for j in range(len(self.li[i])):
-                tempmat[j].append(self.li[i][j])
+        sself = [line.copy() for line in self.li]
+        for i in range(len(sself)):
+            for j in range(len(sself[0])):
+                if i == 0:
+                    tempmat.append([])
+                tempmat[j].append(sself[i][j])
         self.li = tempmat
         return Matrix(self.li)
 
