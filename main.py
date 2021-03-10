@@ -81,4 +81,55 @@ class Matrix:
 
         return Matrix(tempmat)
 
+    def solve(self, solves):
+        sself = [line.copy() for line in self.li]
+        if len(sself) == len(solves) and len(sself) == len(sself[0]):
+            for i in range(len(sself)):
+                sself[i].append(solves[i])
+            for i in range(len(sself)):
+                if sself[i][i] != 1:
+                    tempx = sself[i][i]
+                    for j in range(len(sself[0])):
+
+                        sself[i][j] /= tempx
+
+                for k in range(len(sself)):
+                    if k == i:
+                        continue
+                    tempx2 = sself[k][i] / sself[i][i]
+                    for l in range(len(sself[0])):
+                        sself[k][l] -= sself[i][l] * tempx2
+
+        else:
+            raise MatrixError(self.li, solves)
+        answ = []
+        for i in range(len(sself)):
+            answ.append(sself[i][-1])
+
+        return answ
+
+
+class SquareMatrix(Matrix):
+    def __rpow__(currmatrix, power):
+        if power == 1:
+            return currmatrix
+#        sself = Matrix([line.copy() for line in currmatrix.li])
+#        fmat = Matrix([line.copy() for line in currmatrix.li])
+
+        if power % 2 == 0:
+            temp = SquareMatrix.__rpow__(currmatrix, power / 2)
+            return temp * temp
+        elif power % 2 == 1:
+            temp = SquareMatrix.__rpow__(currmatrix, (power - 1) / 2)
+            return currmatrix * temp * temp
+
+    def __pow__(self, power):
+        if isinstance(power, int):
+            if power == 0:
+                return self
+            return SquareMatrix.__rpow__(self, power)
+        else:
+            raise MatrixError(self, self)
+
+
 exec(stdin.read())
